@@ -1,0 +1,31 @@
+﻿@model WritePostModel
+@{
+    ViewBag.Title = "Write a blog post";
+}
+
+<h1>Write blog post</h1>
+<form asp-action="Write" asp-controller="Home" method="post" autocomplete="off">
+    <div asp-validation-summary="All" class="error"></div>
+    <p>
+        <label asp-for="Title">Title</label>
+        <input asp-for="Title" maxlength="100" required placeholder="Article title" />
+    </p>
+    <p>
+        <label asp-for="UrlSlug">URL slug</label>
+        <input asp-for="UrlSlug" maxlength="32" required placeholder="article-title" />
+    </p>
+    <p>
+        <label asp-for="Summary">Summary</label>
+        <textarea asp-for="Summary" required rows="3" placeholder="Quickly summarize the article"></textarea>
+    </p>
+    <p>
+        <label asp-for="Body">Body</label>
+        <textarea asp-for="Body" required rows="10"></textarea>
+    </p>
+    <p>
+        <label asp-for="Tags">Tags (optional)</label>
+        <input asp-for="Tags" maxlength="500" placeholder="tag1, tag2, tag3" />
+    </p>
+    <button type="submit">Publish</button>
+    <a asp-action="Index">Back</a>
+</form>

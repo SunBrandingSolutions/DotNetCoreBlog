@@ -1,0 +1,29 @@
+﻿@using Microsoft.Extensions.Options
+@inject IOptions<AppSettings> Settings
+@model IEnumerable<BlogSummary>
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<p>Welcome to the @Settings.Value.BlogTitle application!</p>
+
+
+<div if="@Model.Any()">
+    <p>Latest @Settings.Value.MaxPostsOnHomepage posts:</p>
+    <ol>
+        @foreach (var post in Model)
+        {
+            <li>
+                <article>
+                    <h1><a asp-action="Blog" asp-route-id="@post.UrlSlug">@post.Title</a></h1>
+                    <markdown text="@post.Summary"></markdown>
+                    <span tags="@post.Tags"></span>
+                </article>
+            </li>
+        }
+    </ol>
+</div>
+
+<div if="@(!Model.Any())">
+    <strong>No posts published yet</strong>
+</div>

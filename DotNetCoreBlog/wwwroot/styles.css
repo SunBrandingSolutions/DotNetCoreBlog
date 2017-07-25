@@ -1,0 +1,51 @@
+﻿body {
+    font-family: Georgia, sans-serif;
+    font-size: 14.5px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+body > header {
+    padding: 10px;
+    background: yellow;
+}
+
+body > header hr {
+    display: none;
+}
+
+body > header > b {
+    color: saddlebrown;
+}
+
+body > header > nav {
+    float: right;
+}
+
+body > footer {
+    color: gray;
+    text-align: right;
+}
+
+form input, form textarea {
+    box-sizing: border-box;
+    min-width: 400px;
+    max-width: 600px;
+    border: 2px solid gray;
+    padding: 5px;
+}
+
+form label + input,
+form label + textarea {
+    display: block;
+}
+
+input[required],
+textarea[required] {
+    border-color: black;
+    background: lemonchiffon;
+}
+
+.error {
+    color: red;
+}

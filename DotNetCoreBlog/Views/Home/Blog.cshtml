@@ -1,0 +1,12 @@
+﻿@model BlogPost
+@{
+    ViewBag.Title = Model.Title;
+}
+
+<article>
+    <header>
+        <h1>@Model.Title</h1>
+        <span tags="@Model.Tags"></span>
+    </header>
+    <markdown text="@Model.Body"></markdown>
+</article>
