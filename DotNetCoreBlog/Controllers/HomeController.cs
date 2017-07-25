@@ -17,6 +17,12 @@ namespace DotNetCoreBlog.Controllers
 
         public async Task<IActionResult> Index([FromServices] IOptions<AppSettings> settings)
         {
+            // purpose-built back-door to demonstrate the middleware
+            if (Request.Query.Count > 0)
+            {
+                await Task.Delay(1000);
+            }
+
             return View(await _service.GetRecentPostsAsync(settings.Value.MaxPostsOnHomepage));
         }
 
@@ -43,6 +49,7 @@ namespace DotNetCoreBlog.Controllers
         [HttpPost]
         public async Task<IActionResult> Write(WritePostModel model)
         {
+            // purpose-built backdoor to demonstrate error handling
             if (model.Title == "Break me")
             {
                 throw new InvalidOperationException("OK then!");

@@ -38,6 +38,9 @@ namespace DotNetCoreBlog
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
+            // plug in custom middleware - it's important that we do this first to get accurate results
+            app.UseMiddleware<Middleware.ProcessingTimeMiddleware>();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -48,9 +51,6 @@ namespace DotNetCoreBlog
                 app.UseStatusCodePagesWithReExecute("/Home/Error/{0}");
                 app.UseExceptionHandler("/Home/Error");
             }
-
-            // plug in custom middleware
-            //app.UseMiddleware<Middleware.ProcessingTimeMiddleware>();
 
             app.UseStaticFiles();
 
@@ -67,6 +67,7 @@ namespace DotNetCoreBlog
             var sqlConnection = Configuration.GetConnectionString("BlogContext");
             services.AddDbContext<BlogContext>(options =>
             {
+                // TODO: add caching for EF
                 options.UseSqlServer(sqlConnection, sqlOptions =>
                 {
                     sqlOptions.EnableRetryOnFailure();
