@@ -68,6 +68,7 @@ namespace DotNetCoreBlog
             services.AddDbContext<BlogContext>(options =>
             {
                 // TODO: add caching for EF
+                options.UseMemoryCache(null);
                 options.UseSqlServer(sqlConnection, sqlOptions =>
                 {
                     sqlOptions.EnableRetryOnFailure();
