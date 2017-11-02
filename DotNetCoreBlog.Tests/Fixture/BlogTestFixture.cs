@@ -33,7 +33,7 @@ namespace DotNetCoreBlog.Tests.Fixture
             _server = new TestServer(builder);
 
             _contextOptions = new DbContextOptionsBuilder<BlogContext>()
-                .UseInMemoryDatabase()
+                .UseInMemoryDatabase("Blog")
                 .Options;
 
             Client = GetClient();

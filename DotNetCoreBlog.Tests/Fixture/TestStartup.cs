@@ -14,7 +14,7 @@ namespace DotNetCoreBlog.Tests.Fixture
 
         protected override void ConfigureDatabase(IServiceCollection services)
         {
-            services.AddDbContext<BlogContext>(builder => builder.UseInMemoryDatabase());
+            services.AddDbContext<BlogContext>(builder => builder.UseInMemoryDatabase("Blog"));
         }
     }
 }
