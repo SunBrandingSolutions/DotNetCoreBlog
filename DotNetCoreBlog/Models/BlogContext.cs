@@ -9,6 +9,10 @@ namespace DotNetCoreBlog.Models
         {
         }
 
+        protected BlogContext()
+        {
+        }
+
         public DbSet<BlogPost> Posts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

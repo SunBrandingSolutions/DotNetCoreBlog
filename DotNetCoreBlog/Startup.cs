@@ -10,34 +10,33 @@ namespace DotNetCoreBlog
 {
     public class Startup
     {
-        public Startup(IHostingEnvironment env)
+        public Startup(IConfiguration config)
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-                .AddEnvironmentVariables();
-            Configuration = builder.Build();
+            Configuration = config;
         }
 
-        public IConfigurationRoot Configuration { get; }
+        public IConfiguration Configuration { get; }
         
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
-
             services.Configure<AppSettings>(Configuration.GetSection(nameof(AppSettings)));
 
-            ConfigureDatabase(services);
+            var sqlConnection = Configuration.GetConnectionString("Blog");
+            services.AddDbContextPool<BlogContext>(options =>
+            {
+                options.UseSqlServer(sqlConnection, sqlOptions =>
+                {
+                    sqlOptions.EnableRetryOnFailure();
+                });
+            });
 
             services.AddTransient<BlogService>();
+
+            services.AddMvc();
         }
-        
+
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
-
             // plug in custom middleware - it's important that we do this first to get accurate results
             app.UseMiddleware<Middleware.ProcessingTimeMiddleware>();
 
@@ -59,20 +58,6 @@ namespace DotNetCoreBlog
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
-            });
-        }
-
-        protected virtual void ConfigureDatabase(IServiceCollection services)
-        {
-            var sqlConnection = Configuration.GetConnectionString("BlogContext");
-            services.AddDbContext<BlogContext>(options =>
-            {
-                // TODO: add caching for EF
-                options.UseMemoryCache(null);
-                options.UseSqlServer(sqlConnection, sqlOptions =>
-                {
-                    sqlOptions.EnableRetryOnFailure();
-                });
             });
         }
     }
